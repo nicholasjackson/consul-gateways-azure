@@ -44,7 +44,7 @@ retry_join = ["${consul_cluster_addr}"]
 EOF
 
 # Create config and register service
-cat << EOF > /etc/consul/config/pong.json
+cat << EOF > /etc/consul/config/payment.json
 {
   "service": {
     "name": "payment",
@@ -54,11 +54,13 @@ cat << EOF > /etc/consul/config/pong.json
       "sidecar_service": {
         "port": 20000,
         "proxy": {
-          upstreams {
-            destination_name = "currency"
-            local_bind_address = "127.0.0.1"
-            local_bind_port = 9091
-          }
+          "upstreams": [
+            {
+              "destination_name": "currency",
+              "local_bind_address": "127.0.0.1",
+              "local_bind_port": 9091
+            }
+          ]
         }
       }
     }  
@@ -90,7 +92,7 @@ Description=Consul Envoy
 After=syslog.target network.target
 
 [Service]
-ExecStart=/usr/local/bin/consul connect envoy -sidecar-for pong-vms
+ExecStart=/usr/local/bin/consul connect envoy -sidecar-for payment-vms
 ExecStop=/bin/sleep 5
 Restart=always
 
@@ -107,9 +109,9 @@ Description=Payment
 After=syslog.target network.target
 
 [Service]
-Environment=MESSAGE=payment successful
+Environment=MESSAGE="payment successful"
 Environment=NAME=Payment
-Environment=UPSTREAM_URIS=http://localhost:9090
+Environment=UPSTREAM_URIS=http://localhost:9091
 ExecStart=/usr/local/bin/fake-service
 ExecStop=/bin/sleep 5
 Restart=always

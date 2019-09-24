@@ -1,3 +1,14 @@
+terraform {
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "hashicorp-team-da-beta"
+
+    workspaces {
+      name = "consul-gateways-azure"
+    }
+  }
+}
+
 resource "azurerm_resource_group" "pong" {
   name     = var.project
   location = var.region

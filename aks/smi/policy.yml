@@ -29,7 +29,7 @@ specs:
 apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
-  name: api
+  name: payment
 
 ---
 kind: TrafficTarget
@@ -39,7 +39,7 @@ metadata:
   namespace: default
 destination:
   kind: ServiceAccount
-  name: api
+  name: payment
   namespace: default
 sources:
 - kind: ServiceAccount
@@ -47,4 +47,4 @@ sources:
   namespace: default
 specs:
 - kind: TCPRoute
-  name: api
+  name: payment

@@ -4,10 +4,11 @@ resource "kubernetes_config_map" "central_config" {
   }
 
   data = {
-    "currency-defaults.hcl" = file("${path.module}/consul_config/currency-defaults.hcl")
     "web-defaults.hcl" = file("${path.module}/consul_config/web-defaults.hcl")
+    "payment-defaults.hcl" = file("${path.module}/consul_config/payment-defaults.hcl")
     "payment-resolver.hcl" = file("${path.module}/consul_config/payment-resolver.hcl")
     "currency-resolver.hcl" = file("${path.module}/consul_config/currency-resolver.hcl")
+    "currency-defaults.hcl" = file("${path.module}/consul_config/currency-defaults.hcl")
   }
 }
 
