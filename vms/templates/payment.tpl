@@ -54,6 +54,11 @@ cat << EOF > /etc/consul/config/pong.json
       "sidecar_service": {
         "port": 20000,
         "proxy": {
+          upstreams {
+            destination_name = "currency"
+            local_bind_address = "127.0.0.1"
+            local_bind_port = 9091
+          }
         }
       }
     }  
@@ -104,6 +109,7 @@ After=syslog.target network.target
 [Service]
 Environment=MESSAGE=payment successful
 Environment=NAME=Payment
+Environment=UPSTREAM_URIS=http://localhost:9090
 ExecStart=/usr/local/bin/fake-service
 ExecStop=/bin/sleep 5
 Restart=always

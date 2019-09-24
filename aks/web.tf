@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "web" {
 
         annotations = {
           "consul.hashicorp.com/connect-inject"            = "true"
-          "consul.hashicorp.com/connect-service-upstreams" = "api:9091"
+          "consul.hashicorp.com/connect-service-upstreams" = "payment:9091"
           "consul.hashicorp.com/connect-service-name"      = "web"
         }
       }

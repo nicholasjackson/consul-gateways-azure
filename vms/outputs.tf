@@ -1,5 +1,5 @@
 output "private_key" {
-  value = tls_private_key.pong.private_key_pem
+  value = tls_private_key.vms.private_key_pem
 }
 
 output "consul_server_addr" {
