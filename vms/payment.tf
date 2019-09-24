@@ -60,7 +60,7 @@ resource "azurerm_virtual_machine" "payment" {
     computer_name  = "payment"
     admin_username = "ubuntu"
     admin_password = "Password1234!"
-    custom_data = data.template_file.pong.rendered 
+    custom_data = data.template_file.payment.rendered 
   }
 
   os_profile_linux_config {
