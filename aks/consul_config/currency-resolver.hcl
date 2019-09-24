@@ -1,7 +1,7 @@
 kind = "service-resolver"
-name = "pong-aks"
+name = "currency"
 
 redirect {
-  service    = "pong-aks"
+  service    = "currency"
   datacenter = "aks"
 }

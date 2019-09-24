@@ -4,10 +4,11 @@ resource "kubernetes_config_map" "central_config" {
   }
 
   data = {
-    "pong-aks-defaults.hcl" = file("${path.module}/consul_config/pong-aks-defaults.hcl")
-    "pong-vms-defaults.hcl" = file("${path.module}/consul_config/pong-vms-defaults.hcl")
-    "pong-aks-resolver.hcl" = file("${path.module}/consul_config/pong-aks-resolver.hcl")
-    "pong-vms-resolver.hcl" = file("${path.module}/consul_config/pong-vms-resolver.hcl")
+    "currency-defaults.hcl" = file("${path.module}/consul_config/currency-defaults.hcl")
+    "api-defaults.hcl" = file("${path.module}/consul_config/api-defaults.hcl")
+    "web-defaults.hcl" = file("${path.module}/consul_config/web-defaults.hcl")
+    "payment-resolver.hcl" = file("${path.module}/consul_config/payment-resolver.hcl")
+    "currency-resolver.hcl" = file("${path.module}/consul_config/currency-resolver.hcl")
   }
 }
 

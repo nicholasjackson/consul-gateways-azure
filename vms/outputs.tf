@@ -10,6 +10,6 @@ output "consul_gateway_addr" {
   value = azurerm_public_ip.consul_gateway.ip_address
 }
 
-output "pong_addr" {
-  value = azurerm_public_ip.pong.ip_address
+output "payment_addr" {
+  value = azurerm_public_ip.payment.ip_address
 }

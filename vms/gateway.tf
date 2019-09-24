@@ -67,7 +67,7 @@ resource "azurerm_virtual_machine" "consul_gateway" {
   os_profile_linux_config {
     disable_password_authentication = true
     ssh_keys {
-      key_data = tls_private_key.pong.public_key_openssh
+      key_data = tls_private_key.vms.public_key_openssh
       path = "/home/ubuntu/.ssh/authorized_keys"
     }
   }

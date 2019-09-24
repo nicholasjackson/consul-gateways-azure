@@ -1,7 +1,7 @@
 Kind = "service-defaults"
-Name = "pong-vms"
+Name = "web"
 
-Protocol = "grpc"
+Protocol = "http"
 
 MeshGateway = {
   mode = "local"

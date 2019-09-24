@@ -1,7 +1,7 @@
 Kind = "service-defaults"
-Name = "pong-aks"
+Name = "payment"
 
-Protocol = "grpc"
+Protocol = "http"
 
 MeshGateway = {
   mode = "local"

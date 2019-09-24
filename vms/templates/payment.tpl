@@ -4,9 +4,9 @@ apt-get update && apt-get install -y unzip
 
 cd /tmp
 
-# Fetch Pong
-wget https://github.com/nicholasjackson/cloud-pong/releases/download/v0.3.0/pong-api -O /usr/local/bin/pong-api
-chmod +x /usr/local/bin/pong-api
+# Fetch Fake service
+wget https://github.com/nicholasjackson/fake-service/releases/download/v0.4.1/fake-service -O /usr/local/bin/fake-service
+chmod +x /usr/local/bin/fake-service
 
 # Fetch Envoy
 wget https://github.com/nicholasjackson/cloud-pong/releases/download/v0.3.0/envoy -O /usr/local/bin/envoy
@@ -47,20 +47,13 @@ EOF
 cat << EOF > /etc/consul/config/pong.json
 {
   "service": {
-    "name": "pong-vms",
-    "id":"pong-vms",
-    "port": 6000,
+    "name": "payment",
+    "id":"payment-vms",
+    "port": 9090,
     "connect": { 
       "sidecar_service": {
         "port": 20000,
         "proxy": {
-          "upstreams": [
-            {
-              "destination_name": "pong-aks",
-              "local_bind_address": "127.0.0.1",
-              "local_bind_port": 6001
-            }
-          ]
         }
       }
     }  
@@ -102,15 +95,16 @@ EOF
 
 chmod 644 /etc/systemd/system/consul-envoy.service
 
-# Setup systemd Pong
-cat << EOF > /etc/systemd/system/pong.service
+# Setup systemd Payment service
+cat << EOF > /etc/systemd/system/payment.service
 [Unit]
-Description=Pong
+Description=Payment
 After=syslog.target network.target
 
 [Service]
-Environment=PLAYER=2
-ExecStart=/usr/local/bin/pong-api
+Environment=MESSAGE=payment successful
+Environment=NAME=Payment
+ExecStart=/usr/local/bin/fake-service
 ExecStop=/bin/sleep 5
 Restart=always
 
@@ -123,4 +117,4 @@ chmod 644 /etc/systemd/system/pong.service
 systemctl daemon-reload
 systemctl start consul.service
 systemctl start consul-envoy.service
-systemctl start pong.service
+systemctl start payment.service

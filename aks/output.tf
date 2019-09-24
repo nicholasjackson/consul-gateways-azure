@@ -6,6 +6,6 @@ output "consul_public_ip" {
   value = kubernetes_service.consul.load_balancer_ingress.0.ip
 }
 
-output "pong_public_ip" {
-  value = kubernetes_service.pong_service.load_balancer_ingress.0.ip
+output "web_public_ip" {
+  value = kubernetes_service.web_service.load_balancer_ingress.0.ip
 }

@@ -1,34 +1,28 @@
-terraform {
-  backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "hashicorp-team-da-beta"
-
-    workspaces {
-      name = "consul-gateways-azure"
-    }
-  }
+resource "azurerm_resource_group" "pong" {
+  name     = var.project
+  location = var.region
 }
 
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = var.project
-  location            = var.location
-  resource_group_name = var.resource_group
-  dns_prefix          = var.project
+module "aks" {
+  source = "./aks"
 
-  agent_pool_profile {
-    name            = "default"
-    count           = var.client_nodes
-    vm_size         = "Standard_D1_v2"
-    os_type         = "Linux"
-    os_disk_size_gb = 30
-  }
+  project = var.project
+  resource_group = azurerm_resource_group.pong.name
+  location = azurerm_resource_group.pong.location
 
-  service_principal {
-    client_id     = var.client_id
-    client_secret = var.client_secret
-  }
+  client_nodes = 3
 
-  tags = {
-    Environment = "Production"
-  }
+  # Azure client id and secret to allow K8s to create loadbalancers
+  client_id = var.client_id
+  client_secret = var.client_secret
+}
+
+module "vms" {
+  source = "./vms"
+
+  project = var.project
+  resource_group = azurerm_resource_group.pong.name
+  location = azurerm_resource_group.pong.location
+
+  consul_primary_addr = module.aks.consul_public_ip
 }

@@ -28,8 +28,8 @@ function ssh_consul_gateway {
   ssh -o StrictHostKeyChecking=no -i ./server.pem ubuntu@$(terraform output vms_consul_gateway_addr)
 }
 
-function ssh_pong {
-  ssh -o StrictHostKeyChecking=no -i ./server.pem ubuntu@$(terraform output vms_pong_addr)
+function ssh_payment {
+  ssh -o StrictHostKeyChecking=no -i ./server.pem ubuntu@$(terraform output vms_payment_addr)
 }
 
 case "$1" in
@@ -51,10 +51,10 @@ case "$1" in
     get_private_key
     ssh_consul_gateway
     ;;
-  ssh_vm_pong)
-    echo Opening SSH session to Pong Server
+  ssh_vm_payment)
+    echo Opening SSH session to Payment Server
     get_private_key
-    ssh_pong
+    ssh_payment
     ;;
   *)
     echo "Usage:"
@@ -62,6 +62,6 @@ case "$1" in
     echo "vm_private_key        - Fetch SSH Private key for VMS from the remote state"
     echo "ssh_vm_consul_server  - Create an SSH session to the consul server"
     echo "ssh_vm_consul_gateway - Create an SSH session to the consul gateway"
-    echo "ssh_vm_pong           - Create an SSH session to the consul gateway"
+    echo "ssh_vm_payment        - Create an SSH session to the payment service"
     exit 1
 esac

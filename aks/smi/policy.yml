@@ -2,47 +2,49 @@
 apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
-  name: pong-aks
+  name: currency
 
 ---
 kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha1
 metadata:
-  name: pong-aks-targets
+  name: api-targets
   namespace: default
 destination:
   kind: ServiceAccount
-  name: pong-aks
+  name: currency
   namespace: default
 sources:
 - kind: ServiceAccount
-  name: pong-vms
+  name: web
+  namespace: default
+- kind: ServiceAccount
+  name: payment
   namespace: default
 specs:
 - kind: TCPRoute
-  name: pong-aks
-
+  name: currency
 
 ---
 apiVersion: specs.smi-spec.io/v1alpha1
 kind: TCPRoute
 metadata:
-  name: pong-vms
+  name: api
 
 ---
 kind: TrafficTarget
 apiVersion: access.smi-spec.io/v1alpha1
 metadata:
-  name: pong-vms-targets
+  name: api-targets
   namespace: default
 destination:
   kind: ServiceAccount
-  name: pong-vms
+  name: api
   namespace: default
 sources:
 - kind: ServiceAccount
-  name: pong-aks
+  name: web
   namespace: default
 specs:
 - kind: TCPRoute
-  name: pong-vms
+  name: api
