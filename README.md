@@ -1,8 +1,8 @@
 # Cloud Pong Terraform Setup for Microsoft Azure
 
-This Terraform code configures two Consul Datacenters, one running in AKS and the other on Virtual Machines in Microsoft Azure.
+This Terraform code configures two Consul Datacenters, one running in Kubernetes and the other on Virtual Machines in Microsoft Azure.
 
-![](../images/pong.png)
+![](/images/gateways.png)
 
 The two Datacenters are federated together and service traffic is routed using Consul Gateways.
 
@@ -75,13 +75,50 @@ You can check that these have been applied by looking at the Consul UI:
 $ open "http://$(terraform output vms_consul_server_addr):8500/ui/aks/intentions"
 ```
 
-![](../images/intentions.png)
+## Running the app
 
-## Run the game
+The application can be run using curl. First fetch the endpoint ip from the kubernetes services.
 
-The game can be run by following [these](../README.md#run-player-1-api) directions and replacing localhost for both player 1 and player 2 with the pong-lb external LB IP from the Kubernetes clusters and the vms_pong_addr from `terraform output` respectively.
+```
+➜ kubectl get svc
+NAME                                 TYPE           CLUSTER-IP    EXTERNAL-IP      PORT(S)                                                                   AGE
+consul-consul-connect-injector-svc   ClusterIP      10.0.6.49     <none>           443/TCP                                                                   3m58s
+consul-consul-dns                    ClusterIP      10.0.30.111   <none>           53/TCP,53/UDP                                                             3m58s
+consul-consul-server                 ClusterIP      None          <none>           8500/TCP,8301/TCP,8301/UDP,8302/TCP,8302/UDP,8300/TCP,8600/TCP,8600/UDP   3m58s
+consul-consul-ui                     ClusterIP      10.0.228.59   <none>           80/TCP                                                                    3m58s
+consul-lb                            LoadBalancer   10.0.192.89   104.42.213.169   80:32362/TCP,8500:30709/TCP,8302:30944/TCP,8300:30177/TCP                 7m54s
+gateways                             LoadBalancer   10.0.50.122   104.42.208.24    443:30866/TCP                                                             7m54s
+kubernetes                           ClusterIP      10.0.0.1      <none>           443/TCP                                                                   12m
+web-lb                               LoadBalancer   10.0.75.196   104.42.208.69    80:32761/TCP                                                              7m55s
+```
 
-Game controls can be found [here](../README.md#controls).
+```
+➜ curl 104.42.208.69
+{
+  "name": "web",
+  "type": "HTTP",
+  "duration": "12.968804ms",
+  "body": "Welcome to the service mess superstore",
+  "upstream_calls": [
+    {
+      "name": "Payment",
+      "uri": "http://localhost:9091",
+      "type": "HTTP",
+      "duration": "7.080423ms",
+      "body": "\"payment",
+      "upstream_calls": [
+        {
+          "name": "currency-aks",
+          "uri": "http://localhost:9091",
+          "type": "HTTP",
+          "duration": "10.7µs",
+          "body": "rate 1USD to 3GBP"
+        }
+      ]
+    }
+  ]
+}
+```
 
 ## Helper
 
