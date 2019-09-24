@@ -1,9 +1,10 @@
-variable "project" {}
+variable "project" {
+  default = "cloud-pong"
+}
 
-variable "resource_group"{}
-variable "location"{}
-
-variable "client_nodes" {}
+variable "region"{
+  default  = "West US"
+}
 
 variable "client_id" {}
 variable "client_secret" {}

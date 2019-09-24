@@ -1,14 +1,3 @@
-terraform {
-  backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "hashicorp-team-da-beta"
-
-    workspaces {
-      name = "consul-gateways-azure"
-    }
-  }
-}
-
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = var.project
   location            = var.location
