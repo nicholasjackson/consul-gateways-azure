@@ -63,10 +63,10 @@ Then you can apply the Traffic Targets to allow traffic between the two Pong Ser
 
 ```
 $ kubectl apply -f policy.yml
-tcproute.specs.smi-spec.io/pong-aks created
-traffictarget.access.smi-spec.io/pong-aks-targets created
-tcproute.specs.smi-spec.io/pong-vms created
-traffictarget.access.smi-spec.io/pong-vms-targets created
+tcproute.specs.smi-spec.io/currency created
+traffictarget.access.smi-spec.io/currency-targets created
+tcproute.specs.smi-spec.io/payment created
+traffictarget.access.smi-spec.io/payment-targets created
 ```
 
 You can check that these have been applied by looking at the Consul UI:
