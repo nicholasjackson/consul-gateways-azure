@@ -1,4 +1,4 @@
-# Cloud Pong Terraform Setup for Microsoft Azure
+# Payments on the Cloud using Consul Service Mesh and Microsoft Azure
 
 This Terraform code configures two Consul Datacenters, one running in Kubernetes and the other on Virtual Machines in Microsoft Azure.
 
