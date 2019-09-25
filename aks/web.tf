@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "web" {
 
           env {
             name  = "MESSAGE"
-            value = "Welcome to the service mess superstore"
+            value = "Welcome to the service mesh superstore!"
           }
 
           env {

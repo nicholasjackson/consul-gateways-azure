@@ -7,6 +7,6 @@
 
 # .tfvars files
 *.tfvars
-
+env.sh
 kube_config.yml
 server.pem

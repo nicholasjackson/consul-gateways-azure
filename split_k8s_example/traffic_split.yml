@@ -6,7 +6,7 @@ metadata:
 data:
   1_web_defaults.hcl: |
     kind = "service-defaults"
-    name = "web"
+    name = "hello"
     protocol = "http"
   2_api_defaults.hcl: |
     kind = "service-defaults"
@@ -61,42 +61,27 @@ spec:
           mountPath: "/config"
 
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: web-service
-spec:
-  selector:
-    app: web
-  ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 9090
-  type: LoadBalancer
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-deployment
+  name: hello-deployment
   labels:
-    app: web
+    app: hello
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web
+      app: hello
   template:
     metadata:
       labels:
-        app: web
+        app: hello
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/connect-service-upstreams": "api:9091"
     spec:
       containers:
-      - name: web
+      - name: hello
         image: nicholasjackson/fake-service:v0.4.1
         ports:
         - containerPort: 9090
@@ -106,7 +91,7 @@ spec:
         - name: "UPSTREAM_URIS"
           value: "http://localhost:9091"
         - name: "NAME"
-          value: "web"
+          value: "hello"
         - name: "MESSAGE"
           value: "Hello World"
         - name: "HTTP_CLIENT_KEEP_ALIVES"
@@ -179,3 +164,27 @@ spec:
           value: "api-v2"
         - name: "MESSAGE"
           value: "Response from API v2"
+
+---
+apiVersion: specs.smi-spec.io/v1alpha1
+kind: TCPRoute
+metadata:
+  name: api
+
+---
+kind: TrafficTarget
+apiVersion: access.smi-spec.io/v1alpha1
+metadata:
+  name: api-targets
+  namespace: default
+destination:
+  kind: ServiceAccount
+  name: api
+  namespace: default
+sources:
+- kind: ServiceAccount
+  name: hello
+  namespace: default
+specs:
+- kind: TCPRoute
+  name: api

@@ -12,6 +12,10 @@ terraform {
 resource "azurerm_resource_group" "pong" {
   name     = var.project
   location = var.region
+
+  tags = {
+    environment = "DoNotDelete"
+  }
 }
 
 module "aks" {
