@@ -185,10 +185,14 @@ With a running Kubernetes cluster and the Consul Helm chart installed a simple 2
 ➜ kubectl apply -f traffic_split.yml
 configmap/central-config-split created
 job.batch/central-config-split created
-service/web-service created
-deployment.apps/web-deployment created
+deployment.apps/hello-deployment created
 deployment.apps/api-deployment-v1 created
 deployment.apps/api-deployment-v2 created
+```
+
+```
+➜ kubectl apply -f traffic_split_k8s_hello_service.yaml
+service/hello created
 ```
 
 This config contains the following elements
@@ -199,7 +203,7 @@ This config contains the following elements
 * Config map containing L7 config
 * Job to load L7 config
 
-Once up and running the application can be called by curling the web-service
+Once up and running the application can be called by curling the hello
 
 ```
 ➜ kubectl get svc
@@ -209,7 +213,7 @@ consul-consul-dns                    ClusterIP      10.0.156.52    <none>       
 consul-consul-server                 ClusterIP      None           <none>          8500/TCP,8301/TCP,8301/UDP,8302/TCP,8302/UDP,8300/TCP,8600/TCP,8600/UDP   2d4h
 consul-consul-ui                     ClusterIP      10.0.175.50    <none>          80/TCP                                                                    2d4h
 kubernetes                           ClusterIP      10.0.0.1       <none>          443/TCP                                                                   2d4h
-web-service                          LoadBalancer   10.0.108.23    13.64.193.176   80:32195/TCP                                                              41m
+hello                                LoadBalancer   10.0.108.23    13.64.193.176   80:32195/TCP                                                              41m
 ```
 
 ```
@@ -239,12 +243,12 @@ To enable traffic splitting apply the central config to consul using the CLI
 ➜ consul config write 1_api-splitter.hcl
 ```
 
-Now when the web endpoint is curled traffic will be split between `v1` and `v2`
+Now when the hello endpoint is curled traffic will be split between `v1` and `v2`
 
 ```
 ➜ curl  13.64.193.176
 {
-  "name": "web",
+  "name": "hello",
   "type": "HTTP",
   "duration": "10.967173ms",
   "body": "Hello World",
@@ -261,7 +265,7 @@ Now when the web endpoint is curled traffic will be split between `v1` and `v2`
 
 ➜ curl  13.64.193.176
 {
-  "name": "web",
+  "name": "hello",
   "type": "HTTP",
   "duration": "10.151383ms",
   "body": "Hello World",
@@ -308,7 +312,7 @@ Curling the endpoint will now only show the v2 API as an upstream:
 ```
 ➜ curl  13.64.193.176
 {
-  "name": "web",
+  "name": "hello",
   "type": "HTTP",
   "duration": "10.151383ms",
   "body": "Hello World",
@@ -325,7 +329,7 @@ Curling the endpoint will now only show the v2 API as an upstream:
 
 ➜ curl  13.64.193.176
 {
-  "name": "web",
+  "name": "hello",
   "type": "HTTP",
   "duration": "10.151383ms",
   "body": "Hello World",
